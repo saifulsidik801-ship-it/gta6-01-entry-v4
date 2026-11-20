@@ -1,0 +1,50 @@
+[
+  {
+    "shot": "01-cover-police-chase-dusk.jpg",
+    "state": "drive",
+    "errors": [],
+    "luminance": {
+      "rec709": 0.5578838120882895,
+      "rec601": 0.5740099133593982,
+      "w": 1024,
+      "h": 576
+    },
+    "bytes": 120798
+  },
+  {
+    "shot": "02-on-foot-gunfight.jpg",
+    "state": "foot",
+    "errors": [],
+    "luminance": {
+      "rec709": 0.6135971301880704,
+      "rec601": 0.6315945003203081,
+      "w": 1024,
+      "h": 576
+    },
+    "bytes": 126389
+  },
+  {
+    "shot": "03-map-districts.jpg",
+    "state": "map",
+    "errors": [],
+    "luminance": {
+      "rec709": 0.5561390886267336,
+      "rec601": 0.5720510065881222,
+      "w": 1024,
+      "h": 576
+    },
+    "bytes": 105549
+  },
+  {
+    "shot": "04-garage-workshop.jpg",
+    "state": "garage",
+    "errors": [],
+    "luminance": {
+      "rec709": 0.5052507465597504,
+      "rec601": 0.5166200562852247,
+      "w": 1024,
+      "h": 576
+    },
+    "bytes": 87100
+  }
+]

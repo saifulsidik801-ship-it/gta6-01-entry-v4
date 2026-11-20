@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>MARISOL BAY — an original open-world crime story</title>
+<link rel="icon" href="data:,">
+<link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+<div id="app">
+  <canvas id="game"></canvas>
+
+  <!-- ============ IN-GAME HUD (drive / on foot) ============ -->
+  <div id="hud" class="hidden">
+    <div id="mission" class="panel">
+      <div class="m-top"><span class="m-tag" id="mTag">MISSION 3 &middot; DOWNTOWN HEAT</span><span id="mTimer" class="m-timer">2:29</span></div>
+      <div class="m-title" id="mTitle">LOSE THE PATROL</div>
+      <div class="m-sub" id="mSub">Lose the patrol on the downtown streets</div>
+      <div class="m-bar"><i id="mBarFill"></i></div>
+      <div class="m-next">STAGE <b id="mStage">3/4</b> &nbsp; NEXT <span id="mNext">Vanish through the Lantern Mile alleys</span></div>
+    </div>
+
+    <div id="topleft2" class="panel">
+      <div class="p-head">POLICE RESPONSE <span class="p-units" id="pUnits">5 UNITS</span></div>
+      <div id="dispatchRows"></div>
+      <div class="p-foot" id="pFoot">IN SIGHT &middot; CLOSEST 7 M</div>
+    </div>
+
+    <div id="moneybox">
+      <div id="clock">18:45</div>
+      <div id="money">$18,450</div>
+      <div id="stars">★★★★<span class="dim">★</span></div>
+      <div id="rankline"><span class="rank-chip">RANK 5 &middot; FIXER</span><span id="rpLine">3,900 / 5,200 RP</span></div>
+      <div id="rpbar"><i style="width:75%"></i></div>
+    </div>
+
+    <div id="airunit" class="panel"><span class="dot"></span> AIR UNIT &middot; HELI 1 &mdash; TRACKING</div>
+
+    <div id="weapons"></div>
+
+    <div id="crew">
+      <div class="crew-row"><span class="avatar" style="background:#2dd4bf">M</span><div><b>MIRA KESANG</b><span>SWAP PLATES &middot; DRIVER</span></div><kbd>Z</kbd></div>
+      <div class="crew-row"><span class="avatar" style="background:#f59e0b">L</span><div><b>LIO</b><b class="c2">QUICK FIX &middot; MECHANIC</b></div><kbd>X</kbd></div>
+      <div class="crew-row"><span class="avatar" style="background:#a855f7">K</span><div><b>KIKI</b><b class="c2">EYES OUT &middot; LOOKOUT</b></div><kbd>C</kbd></div>
+    </div>
+
+    <div id="banner" class="hidden">IN SIGHT</div>
+    <div id="subbanner" class="hidden">Air One has you in the light</div>
+
+    <div id="district" class="panel">
+      <div class="d-name" id="dName">MARINA ROW</div>
+      <div class="d-sub" id="dSub">Shoreline Ave</div>
+      <div class="d-row"><span id="dMood">FRIENDLY &middot; 73</span></div>
+      <canvas id="minimap" width="220" height="220"></canvas>
+      <div id="vitals">
+        <div class="v-row"><span>MILO KADE</span></div>
+        <div class="v-row"><span>HEALTH</span><div class="v-bar"><i id="hpFill" style="width:76%;background:#22c55e"></i></div><b id="hpNum">76</b></div>
+        <div class="v-row"><span>ARMOUR</span><div class="v-bar"><i id="arFill" style="width:58%;background:#38bdf8"></i></div><b id="arNum">58</b></div>
+      </div>
+    </div>
+
+    <div id="dialogue" class="panel">
+      <span class="avatar" style="background:#2dd4bf">M</span>
+      <div><b id="dlgName">MIRA KESANG &middot; CREW &middot; DRIVER</b><span id="dlgText">&ldquo;Four units on your tail, Milo &mdash; lose them through the towers, do not stop for anything.&rdquo;</span></div>
+    </div>
+
+    <div id="speedbox" class="panel">
+      <div id="radio">&#9834; BAY 98.5 &mdash; &ldquo;Sunset Drive&rdquo; &middot; Luna Mar</div>
+      <div id="carName">KITE COUPE</div>
+      <div id="speed"><span id="speedNum">123</span><small>KM/H</small></div>
+      <div class="v-row"><span>CONDITION</span><div class="v-bar"><i id="condFill" style="width:84%;background:#22c55e"></i></div><b id="condNum">84%</b></div>
+    </div>
+
+    <div id="prompt" class="hidden"><kbd>F</kbd> <span id="promptText">STEAL SUNLINE CAB</span></div>
+    <div id="toast" class="hidden"></div>
+    <div id="crosshair" class="hidden"></div>
+  </div>
+
+  <!-- ============ TITLE ============ -->
+  <div id="title" class="overlay hidden">
+    <div class="t-kicker">MARISOL BAY &middot; AN ORIGINAL OPEN-WORLD CRIME STORY</div>
+    <h1 class="t-logo">MARISOL<br><span>BAY</span></h1>
+    <div class="t-sub">HEAT TIDE</div>
+    <div class="t-cols">
+      <div class="t-menu">
+        <button data-act="continue" class="t-btn hot">CONTINUE</button>
+        <button data-act="new" class="t-btn">NEW GAME</button>
+        <button data-act="load" class="t-btn">LOAD GAME</button>
+        <button data-act="settings" class="t-btn">SETTINGS</button>
+      </div>
+      <div class="t-saves">
+        <div class="save"><b>SLOT 1 &middot; ACT II &mdash; MARKET SQUEEZE</b><span>32.8% complete &middot; 3/6 missions &middot; Marina Row</span><span>$12,650 &middot; 18:23</span></div>
+        <div class="save"><b>SLOT 2 &middot; ACT I &mdash; GOLD PAINT</b><span>16.8% complete &middot; 1/6 missions &middot; Wanaru Terraces</span><span>$2,340 &middot; 09:30</span></div>
+        <div class="save dim"><b>SLOT 3 &middot; EMPTY</b><span>Save at Milo&rsquo;s Loft or from the pause menu</span></div>
+      </div>
+    </div>
+    <div class="t-foot">An original open-world crime story on an island that never existed &middot; Keyboard &amp; mouse &middot; WASD move &middot; mouse look &middot; F steal a car &middot; click to fight &middot; TAB weapons &middot; M map &middot; ESC pause</div>
+  </div>
+
+  <!-- ============ MAP ============ -->
+  <div id="mapscreen" class="overlay hidden">
+    <div class="map-head">
+      <h2>MARISOL BAY</h2>
+      <div class="map-tabs"><span class="on">MAP</span><span>STORY</span><span>STATS</span><span>CREW</span><span>SETTINGS</span><span>CONTROLS</span><span>SAVE</span></div>
+      <div class="map-cash">$18,450</div>
+    </div>
+    <div class="map-body">
+      <div class="map-left panel">
+        <div class="ring-wrap"><svg viewBox="0 0 120 120"><circle cx="60" cy="60" r="50" class="ring-bg"/><circle id="ringFg" cx="60" cy="60" r="50" class="ring-fg"/><text x="60" y="58" class="ring-num">66.1%</text><text x="60" y="76" class="ring-lab">COMPLETE</text></svg></div>
+        <div id="mapStats"></div>
+        <div class="map-ratings"><div class="mr-title">MISSION RATINGS</div><div id="mapMedals"></div></div>
+      </div>
+      <div class="map-center"><canvas id="mapcanvas" width="760" height="560"></canvas><div class="map-foot">Street race: Terrace Climb &middot; 0.79 km &nbsp;&middot;&nbsp; Click the map to set a waypoint &nbsp;&middot;&nbsp; ESC resume &middot; Q / E switch tab &middot; M close map</div></div>
+      <div class="map-right">
+        <div class="panel mr"><div class="mr-h">RANK 5 &middot; FIXER</div><div class="mr-sub">3,900 RP &middot; 1,300 to Shot Caller</div><div class="mr-sub">Next: Garage: KPD Bastion</div>
+          <div class="mr-h">CAREER</div><div id="careerRows"></div></div>
+        <div class="panel mr"><div class="mr-h">THE LOW TIDE CREW</div><div id="crewList"></div>
+          <div class="mr-h">MAP KEY</div><div id="mapKey"></div></div>
+        <div class="map-btns"><button data-act="resume">RESUME</button><button data-act="save">SAVE</button><button data-act="menu">MENU</button></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ============ GARAGE ============ -->
+  <div id="garage" class="overlay hidden">
+    <div class="g-head"><h2 id="gTitle">DOCKSIDE CUSTOMS</h2><span class="g-sub">Pilar Santos &middot; mechanic &middot; &ldquo;You break it, I bill it.&rdquo;</span><span class="g-cash">$18,450</span><span class="g-rank">RESPECT LV 5 &middot; TIDE BOSS</span></div>
+    <div class="g-body">
+      <div class="g-carcard panel">
+        <div class="g-carname">VIREO GT</div>
+        <div class="v-row"><span>CONDITION 64%</span><div class="v-bar"><i style="width:64%;background:#22c55e"></i></div></div>
+        <div class="g-chips"><span class="chip on">&#10003; TUNE</span><span class="chip">PLATING</span><span class="chip">NITRO</span></div>
+        <div class="g-stats" id="gStats"></div>
+      </div>
+      <div class="g-panel panel">
+        <div class="g-tabs"><span class="on">WORKSHOP</span><span>SHOWROOM</span></div>
+        <div class="g-sec">CAR UPGRADES</div>
+        <div id="upgrades"></div>
+        <div class="g-sec">WEAPONS &amp; GEAR</div>
+        <div id="gear"></div>
+        <div id="gDesc"><b>ARMOUR PLATING</b><span>Every car you drive takes half damage from crashes, bullets and blasts.</span></div>
+        <button id="gBack">BACK TO THE STREET</button>
+      </div>
+    </div>
+  </div>
+
+  <div id="errlog" class="hidden"></div>
+</div>
+<script src="vendor/three.min.js"></script>
+<script src="src/world.js"></script>
+<script src="src/hud.js"></script>
+<script src="src/main.js"></script>
+</body>
+</html>
